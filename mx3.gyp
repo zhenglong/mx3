@@ -16,7 +16,12 @@
       ],
       'include_dirs': [
         'include',
+        'third_parties/include'
       ],
+      'link_settings': {
+          'libraries': ['-lv8_base', '-lv8_nosnapshot'],
+          'library_dirs': ['/home/tristan/workspace/mx3/third_parties/lib/arm/v8']
+      },
       'all_dependent_settings': {
         'include_dirs': [
           'include',

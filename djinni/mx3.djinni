@@ -10,4 +10,5 @@ api = interface +c {
     has_user(): bool;
     get_username(): string;
     set_username(username: string);
+    add(i: f64, j: f64): f64;
 }

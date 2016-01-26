@@ -8,6 +8,9 @@
 #include "interface/api.hpp"
 #include "single_thread_task_runner.hpp"
 
+#include "v8/v8.h"
+#include <string>
+
 namespace mx3 {
 
 // the "api" of how the UI is allowed to talk to the c++ code
@@ -26,6 +29,7 @@ class Api final : public mx3_gen::Api {
     virtual string get_username() override;
     virtual void set_username(const string& name) override;
     virtual shared_ptr<mx3_gen::UserListVmHandle> observer_user_list() override;
+    virtual double add(double i, double j) override;
 
   private:
     // set up the database

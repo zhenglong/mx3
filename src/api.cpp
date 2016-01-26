@@ -1,3 +1,4 @@
+
 #include "api.hpp"
 #include "stl.hpp"
 #include "github/client.hpp"
@@ -7,6 +8,9 @@
 
 using mx3::Api;
 using json11::Json;
+
+using namespace std;
+using namespace v8;
 
 namespace {
     const string USERNAME_KEY      = "username";
@@ -97,4 +101,55 @@ Api::_setup_db() {
         m_sqlite->exec(cmd);
     }
     m_sqlite->enable_wal();
+}
+
+Handle<v8::Value> CallJsFunction(Isolate* isolate, Handle<v8::Object> global, std::string funcName, Handle<Value> argList[], unsigned int argCount) {
+    Handle<Value> js_result;
+    Handle<v8::Value> value = global->Get(String::NewFromUtf8(isolate, funcName.c_str()));
+    Handle<v8::Function> func = v8::Handle<v8::Function>::Cast(value);
+    js_result = func->Call(global, argCount, argList);
+    return js_result;
+}
+
+void AddFromCpp(Isolate* isolate, const v8::FunctionCallbackInfo<v8::Value>& args) {
+    int myVal = 0;
+    for (int i = 0; i < args.Length(); i++) {
+        v8::HandleScope handle_scope(args.GetIsolate());
+        myVal += args[i]->Int32Value();
+    }
+    args.GetReturnValue().Set(v8::Number::New(isolate, myVal));
+}
+//void CallCppFunction(Isolate* isolate, Handle<v8::Object> global) {
+//    global->Set(v8::String::NewFromUtf8(isolate, "add"), v8::FunctionTemplate::New(isolate, AddFromCpp)->GetFunction());
+//}
+
+void AddStringToArguments(Isolate* isolate, std::string str, Handle<Value> argList[], unsigned int argPos) {
+    argList[argPos] = v8::String::NewFromUtf8(isolate, str.c_str());
+}
+void AddNumbertoArguments(Isolate* isolate, double num, Handle<Value> argList[], unsigned int argPos) {
+    argList[argPos] = v8::Number::New(isolate, num);
+}
+void AddBooleanToArguments(Isolate* isolate, bool value, Handle<Value> argList[], unsigned int argPos) {
+    argList[argPos] = v8::Boolean::New(isolate, value);
+}
+
+double
+Api::add(double i, double j) {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope handle_scope(isolate);
+    Handle<ObjectTemplate> global_template = ObjectTemplate::New();
+    Local<Context> context = Context::New(isolate, NULL, global_template);
+    Context::Scope context_scope(context);
+   
+    string s = "function add(i, j) { return (i+j); }";
+    Handle<String> source = v8::String::NewFromUtf8(isolate, s.c_str());
+
+    Handle<Script> script = Script::Compile(source);
+    script->Run();
+    Handle<Value> args[2];
+    AddNumbertoArguments(isolate, i, args, 0);
+    AddNumbertoArguments(isolate, j, args, 1);
+    Handle<Value> js_result = CallJsFunction(isolate, context->Global(), "add", args, 2);
+    Handle<Number> num = v8::Handle<v8::Number>::Cast(js_result);
+    return num->Value();
 }

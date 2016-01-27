@@ -19,7 +19,7 @@
         'third_parties/include'
       ],
       'link_settings': {
-          'libraries': ['-llog', '-lv8_libbase', '-lv8_base', '-lv8_nosnapshot', '-lv8_libplatform'],
+          'libraries': ['-llog', 'libv8.so'],
           'ldflags': ['-L/home/tristan/workspace/mx3/third_parties/lib/arm/v8']
       },
       'all_dependent_settings': {
@@ -55,12 +55,12 @@
     {
       'target_name': 'libmx3_android',
       'android_unmangled_name': 1,
-      'type': 'static_library',
+      'type': 'shared_library',
       'dependencies': [
         'deps/djinni/support-lib/support_lib.gyp:djinni_jni',
         'libmx3',
       ],
-      'ldflags' : [ '-llog' ],
+	  'ldflags' : [ '-llog' ],
       'sources': [
         '<!@(python glob.py android/jni *.cpp *.hpp)',
         '<!@(python glob.py android/jni_gen *.cpp *.hpp)',

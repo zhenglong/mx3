@@ -19,8 +19,8 @@
         'third_parties/include'
       ],
       'link_settings': {
-          'libraries': ['-lv8_base', '-lv8_nosnapshot'],
-          'library_dirs': ['/home/tristan/workspace/mx3/third_parties/lib/arm/v8']
+          'libraries': ['-llog', '-lv8_libbase', '-lv8_base', '-lv8_nosnapshot', '-lv8_libplatform'],
+          'ldflags': ['-L/home/tristan/workspace/mx3/third_parties/lib/arm/v8']
       },
       'all_dependent_settings': {
         'include_dirs': [
@@ -55,7 +55,7 @@
     {
       'target_name': 'libmx3_android',
       'android_unmangled_name': 1,
-      'type': 'shared_library',
+      'type': 'static_library',
       'dependencies': [
         'deps/djinni/support-lib/support_lib.gyp:djinni_jni',
         'libmx3',

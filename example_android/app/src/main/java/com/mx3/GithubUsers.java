@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 public class GithubUsers extends Activity {
     static {
+        System.loadLibrary("v8");
+        Log.d("Github", "after load v8");
         System.loadLibrary("mx3_android");
     }
 

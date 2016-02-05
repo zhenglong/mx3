@@ -19,7 +19,7 @@
         'third_parties/include'
       ],
       'link_settings': {
-          'libraries': ['-llog', 'libv8.so'],
+          'libraries': ['-llog', 'libv8_base.a', 'libv8_libplatform.a', 'libv8_libase.a', 'libv8_nosnapshot.a'],
           'ldflags': ['-L/home/tristan/workspace/mx3/third_parties/lib/arm/v8']
       },
       'all_dependent_settings': {

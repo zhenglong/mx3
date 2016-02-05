@@ -15,7 +15,7 @@
     'xcode_settings': {
       'OTHER_CFLAGS' : ['<@(_cflags)'],
       'OTHER_CPLUSPLUSFLAGS' : ['<@(_cflags_cc)'],
-      'CLANG_CXX_LANGUAGE_STANDARD': 'c++1y',
+      'CLANG_CXX_LANGUAGE_STANDARD': 'c++11',
       'CLANG_CXX_LIBRARY': 'libc++',
       'CLANG_ENABLE_OBJC_ARC': 'YES',
     },
